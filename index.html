@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VDS Exam Pro — Preparazione Licenza VDS</title>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N0XK82MD4Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-N0XK82MD4Y');
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -293,6 +301,31 @@ body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(1
 .apikey-note a{color:var(--blue);text-decoration:none}
 .apikey-note a:hover{text-decoration:underline}
 .apikey-saved{background:var(--green-dim);border:1px solid var(--green);border-radius:var(--r);padding:8px 14px;font-size:12px;color:var(--green);margin-bottom:14px;display:none}
+
+/* COOKIE BANNER */
+#cookie-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:999;
+  background:rgba(11,22,40,0.97);border-top:1px solid var(--border);
+  padding:12px 20px;display:flex;align-items:center;
+  justify-content:space-between;gap:14px;flex-wrap:wrap;
+  backdrop-filter:blur(8px);transform:translateY(100%);
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+#cookie-banner.show{transform:translateY(0)}
+#cookie-banner p{font-size:12px;color:var(--text-dim);margin:0;flex:1;line-height:1.5}
+#cookie-banner a{color:var(--blue);text-decoration:none}
+#cookie-banner a:hover{text-decoration:underline}
+.cookie-btns{display:flex;gap:8px;flex-shrink:0}
+.btn-accept{font-family:var(--body);font-size:12px;font-weight:700;
+  letter-spacing:0.06em;padding:7px 18px;border-radius:var(--r);
+  cursor:pointer;border:none;background:var(--gold);color:#050c18;
+  text-transform:uppercase;transition:var(--trans)}
+.btn-accept:hover{background:#ffd060}
+.btn-decline{font-family:var(--body);font-size:12px;font-weight:600;
+  padding:7px 14px;border-radius:var(--r);cursor:pointer;
+  border:1px solid var(--border);background:transparent;
+  color:var(--text-dim);text-transform:uppercase;transition:var(--trans)}
+.btn-decline:hover{border-color:var(--border2);color:var(--text)}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--panel)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
@@ -2064,6 +2097,50 @@ function generateAndPrint(){
     </div>
   </div>
 </div>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner">
+  <p>
+    ✈ <strong style="color:var(--text)">VDS Exam Pro</strong> usa Google Analytics per contare i visitatori e migliorare il servizio.
+    Nessun dato personale identificabile viene raccolto.
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>
+  </p>
+  <div class="cookie-btns">
+    <button class="btn-decline" onclick="cookieDecline()">Rifiuta</button>
+    <button class="btn-accept" onclick="cookieAccept()">Accetto ✓</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const consent = localStorage.getItem('vds_ga_consent');
+  if(consent === 'yes') return; // already accepted, GA already loaded
+  if(consent === 'no') {
+    // disable GA
+    window['ga-disable-G-N0XK82MD4Y'] = true;
+    return;
+  }
+  // First visit: show banner after short delay
+  setTimeout(function(){
+    const b = document.getElementById('cookie-banner');
+    if(b) b.classList.add('show');
+  }, 1200);
+})();
+
+function cookieAccept(){
+  localStorage.setItem('vds_ga_consent','yes');
+  const b = document.getElementById('cookie-banner');
+  if(b){ b.classList.remove('show'); }
+  gtag('consent','update',{'analytics_storage':'granted'});
+}
+
+function cookieDecline(){
+  localStorage.setItem('vds_ga_consent','no');
+  window['ga-disable-G-N0XK82MD4Y'] = true;
+  const b = document.getElementById('cookie-banner');
+  if(b){ b.classList.remove('show'); }
+}
+</script>
 </body></html>`;
 
   const win = window.open('','_blank','width=900,height=700');
@@ -2152,5 +2229,49 @@ function generateAndPrint(){
     </div>
   </div>
 </div>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner">
+  <p>
+    ✈ <strong style="color:var(--text)">VDS Exam Pro</strong> usa Google Analytics per contare i visitatori e migliorare il servizio.
+    Nessun dato personale identificabile viene raccolto.
+    <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a>
+  </p>
+  <div class="cookie-btns">
+    <button class="btn-decline" onclick="cookieDecline()">Rifiuta</button>
+    <button class="btn-accept" onclick="cookieAccept()">Accetto ✓</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const consent = localStorage.getItem('vds_ga_consent');
+  if(consent === 'yes') return; // already accepted, GA already loaded
+  if(consent === 'no') {
+    // disable GA
+    window['ga-disable-G-N0XK82MD4Y'] = true;
+    return;
+  }
+  // First visit: show banner after short delay
+  setTimeout(function(){
+    const b = document.getElementById('cookie-banner');
+    if(b) b.classList.add('show');
+  }, 1200);
+})();
+
+function cookieAccept(){
+  localStorage.setItem('vds_ga_consent','yes');
+  const b = document.getElementById('cookie-banner');
+  if(b){ b.classList.remove('show'); }
+  gtag('consent','update',{'analytics_storage':'granted'});
+}
+
+function cookieDecline(){
+  localStorage.setItem('vds_ga_consent','no');
+  window['ga-disable-G-N0XK82MD4Y'] = true;
+  const b = document.getElementById('cookie-banner');
+  if(b){ b.classList.remove('show'); }
+}
+</script>
 </body>
 </html>
