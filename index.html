@@ -217,6 +217,38 @@ body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(1
 .materia-card.has-save{border-color:var(--gold-dim);position:relative}
 .materia-card.has-save::after{content:'▶';position:absolute;top:8px;right:10px;font-size:10px;color:var(--gold);font-family:var(--head)}
 .save-indicator{font-size:10px;color:var(--gold);margin-top:4px;letter-spacing:0.04em}
+
+/* TEORIA SCREEN */
+.teoria-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:16px 20px 0;max-width:1000px;margin:0 auto;border-bottom:1px solid var(--border)}
+.ttab{font-family:var(--body);font-size:13px;font-weight:600;padding:8px 14px;border-radius:var(--r) var(--r) 0 0;border:1px solid transparent;border-bottom:none;background:transparent;color:var(--text-dim);cursor:pointer;transition:var(--trans);letter-spacing:0.03em;white-space:nowrap}
+.ttab:hover{color:var(--text);background:var(--panel)}
+.ttab.active{color:var(--gold);background:var(--panel);border-color:var(--border)}
+.teoria-body{max-width:1000px;margin:0 auto;padding:28px 20px 60px}
+.teoria-chapter{margin-bottom:36px}
+.tc-title{font-family:var(--head);font-size:14px;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.tc-subtitle{font-size:11px;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:16px}
+.tc-text{font-size:15px;color:var(--text);line-height:1.75;margin-bottom:14px}
+.tc-text strong{color:var(--gold)}
+.tc-box{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--r);padding:16px 18px;margin-bottom:16px}
+.tc-box.gold{border-left-color:var(--gold)}
+.tc-box.green{border-left-color:var(--green)}
+.tc-box.red{border-left-color:var(--red)}
+.tc-box-title{font-family:var(--head);font-size:10px;letter-spacing:0.12em;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase}
+.tc-box p{font-size:14px;color:var(--text);line-height:1.65;margin:0}
+.tc-example{background:rgba(59,130,246,0.07);border:1px solid var(--blue-dim);border-radius:var(--r);padding:14px 18px;margin-bottom:16px}
+.tc-example-label{font-size:10px;color:var(--blue);letter-spacing:0.1em;font-weight:700;margin-bottom:6px;text-transform:uppercase}
+.tc-example p{font-size:14px;color:var(--text-dim);line-height:1.65;margin:0}
+.tc-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tc-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--blue);border:1px solid var(--blue-dim);border-radius:20px;padding:5px 12px;text-decoration:none;transition:var(--trans)}
+.tc-link:hover{border-color:var(--blue);background:rgba(59,130,246,0.08)}
+.tc-divider{height:1px;background:var(--border);margin:28px 0}
+.tc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px}
+.tc-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px}
+.tc-card-title{font-family:var(--head);font-size:11px;letter-spacing:0.08em;color:var(--gold);margin-bottom:6px}
+.tc-card p{font-size:13px;color:var(--text-dim);line-height:1.5;margin:0}
+.tc-formula{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:12px 18px;font-family:var(--head);font-size:13px;color:var(--gold);letter-spacing:0.08em;margin-bottom:14px;text-align:center}
+.tc-warn{background:rgba(239,68,68,0.07);border:1px solid var(--red-dim);border-left:3px solid var(--red);border-radius:var(--r);padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--text)}
+.tc-warn::before{content:"⚠ ";color:var(--red);font-weight:700}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--panel)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
@@ -353,6 +385,16 @@ body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(1
       <div class="mode-meta">
         <div class="meta-tag">💡 <span>risposta immediata</span></div>
         <div class="meta-tag">🔄 <span>shuffle completo</span></div>
+      </div>
+    </div>
+    <div class="mode-card" onclick="showScreen('teoria')" style="border-color:rgba(52,211,153,0.3)">
+      <div class="mode-icon" style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.4)">📖</div>
+      <div class="mode-title">Teoria & Approfondimenti</div>
+      <div class="mode-desc">Spiegazioni chiare per ogni materia, esempi pratici, diagrammi e link a fonti ufficiali certificate.</div>
+      <div class="mode-meta">
+        <div class="meta-tag">📚 <span>9 materie</span></div>
+        <div class="meta-tag">🔗 <span>fonti ufficiali</span></div>
+        <div class="meta-tag">✈ <span>esempi pratici</span></div>
       </div>
     </div>
     <div class="mode-card" onclick="openPrintDialog()" style="border-color:rgba(139,92,246,0.3)">
@@ -1060,6 +1102,473 @@ function toggleReview(qid){
 
 function retryQuiz(){clearSession();startMode(state.mode,state.materia);}
 // ============================================================
+// TEORIA CONTENT
+// ============================================================
+const TEORIA = {
+
+aero: `
+<div class="teoria-chapter">
+  <div class="tc-title">🌬 Le Quattro Forze del Volo</div>
+  <div class="tc-subtitle">Fondamento di tutta l'aerodinamica</div>
+  <div class="tc-text">Su ogni aeromobile in volo rettilineo orizzontale agiscono <strong>quattro forze</strong> che devono essere in equilibrio tra loro.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">⬆ PORTANZA (L)</div><p>Forza perpendicolare al vento relativo, generata dall'ala. Sostiene il peso. Agisce verso l'alto in volo livellato.</p></div>
+    <div class="tc-card"><div class="tc-card-title">⬇ PESO (W)</div><p>Forza di gravità che attira il velivolo verso il basso. Agisce nel baricentro (CG). Sempre verticale verso il basso.</p></div>
+    <div class="tc-card"><div class="tc-card-title">➡ TRAZIONE (T)</div><p>Forza prodotta dall'elica/motore che spinge in avanti. In VRO equilibra la resistenza.</p></div>
+    <div class="tc-card"><div class="tc-card-title">⬅ RESISTENZA (D)</div><p>Forza che si oppone al moto, parallela al vento relativo. Somma di resistenza indotta + parassita.</p></div>
+  </div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">✅ In Volo Rettilineo Livellato (VRO)</div>
+    <p><strong>Portanza = Peso</strong> &nbsp;e&nbsp; <strong>Trazione = Resistenza</strong><br>Se una delle quattro forze cambia, si rompe l'equilibrio e il velivolo sale, scende o accelera/decelera.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.lavionnaire.fr/ItaAerodinamica.php" target="_blank" class="tc-link">📘 Aerodinamica del Volo (IT)</a>
+    <a href="https://it.wikipedia.org/wiki/Aerodinamica" target="_blank" class="tc-link">🔍 Wikipedia — Aerodinamica</a>
+    <a href="https://utenti.quipo.it/volare/4forces.htm" target="_blank" class="tc-link">✈ Le 4 Forze (Traduzione IT)</a>
+    <a href="https://www.clubarrow.it/attachments/137_appunti%20dinamica.pdf" target="_blank" class="tc-link">📄 Appunti Dinamica del Volo (PDF)</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">🛩 La Portanza: come nasce</div>
+  <div class="tc-text">L'ala genera portanza perché la sua forma fa scorrere l'aria <strong>più veloce sul dorso (estradosso)</strong> che sul ventre (intradosso). Per il principio di Bernoulli, dove la velocità è maggiore la pressione è minore: si crea <strong>depressione sul dorso</strong> e sovrapressione sul ventre. La risultante è una forza verso l'alto.</div>
+  <div class="tc-formula">Portanza L = ½ · ρ · V² · S · Cₗ</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">ρ = densità dell'aria</div><p>Diminuisce con l'altitudine → a parità di velocità, meno portanza in quota.</p></div>
+    <div class="tc-card"><div class="tc-card-title">V² = velocità al quadrato</div><p>Raddoppiando la velocità, la portanza quadruplica. Effetto molto significativo.</p></div>
+    <div class="tc-card"><div class="tc-card-title">S = superficie alare</div><p>Ala più grande → più portanza. I flap aumentano S e la curvatura.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Cₗ = coefficiente di portanza</div><p>Dipende dall'angolo di incidenza e dal profilo. Aumenta fino all'angolo critico.</p></div>
+  </div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio Pratico</div>
+    <p>Un ultraleggero da 300 kg vola a 90 km/h. Se aumenta il peso a 450 kg (passeggero), deve volare più veloce o aumentare l'angolo di incidenza per mantenere la stessa portanza. Ecco perché la <strong>velocità di stallo aumenta con il peso</strong>.</p>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">⚠ Lo Stallo</div>
+  <div class="tc-subtitle">Il fenomeno più critico per la sicurezza</div>
+  <div class="tc-text">Lo stallo si verifica quando l'<strong>angolo di incidenza supera il valore critico</strong> (circa 15°). I filetti d'aria si staccano dal dorso dell'ala in modo turbolento, la portanza crolla bruscamente e la resistenza aumenta molto. <strong>Non dipende dalla velocità ma dall'angolo.</strong></div>
+  <div class="tc-warn">Lo stallo può avvenire a qualsiasi velocità se l'angolo critico viene superato — anche in virata stretta ad alta velocità (stallo accelerato o "g-stallo").</div>
+  <div class="tc-box red">
+    <div class="tc-box-title">🔴 Rimessa dallo stallo — procedura corretta</div>
+    <p>1. Abbassare il muso (ridurre angolo di incidenza) →<br>2. Applicare piena potenza →<br>3. Livellare le ali con i pedali →<br>4. Riprendere il volo normale.<br><strong>Non si usano mai gli alettoni durante lo stallo</strong> (peggiorano la situazione).</p>
+  </div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">Velocità di stallo e peso</div>
+    <p>Vs aumenta con la radice quadrata del peso. Con flap estesi Vs diminuisce (più Cₗ). In virata a 60° di rollio il fattore di carico è 2, quindi Vs aumenta del 41% (√2).</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://it.wikipedia.org/wiki/Stallo_aerodinamico" target="_blank" class="tc-link">🔍 Wikipedia — Stallo Aerodinamico</a>
+    <a href="https://www.youtube.com/results?search_query=stallo+aerodinamico+spiegazione+italiana" target="_blank" class="tc-link">▶ Video YouTube — Stallo (IT)</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">🔄 La Resistenza e l'Efficienza</div>
+  <div class="tc-text">La <strong>resistenza totale</strong> = resistenza indotta + resistenza parassita. La <strong>resistenza indotta</strong> nasce dalla portanza stessa (vortici alle estremità alari), diminuisce all'aumentare della velocità. La <strong>resistenza parassita</strong> (attrito + forma) aumenta con la velocità. L'<strong>efficienza E = Portanza/Resistenza</strong> indica la distanza percorribile per ogni metro di quota persa.</div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio Pratico</div>
+    <p>Un ultraleggero con efficienza E=12 che parte da 600m di quota può planare (senza motore, in aria calma) per 12 × 600 = <strong>7.200 metri</strong> prima di atterrare. Per massimizzare la distanza di planata si vola alla <strong>velocità di massima efficienza</strong>.</p>
+  </div>
+</div>
+`,
+
+meteo: `
+<div class="teoria-chapter">
+  <div class="tc-title">🌡 L'Atmosfera Standard</div>
+  <div class="tc-subtitle">ISA — International Standard Atmosphere</div>
+  <div class="tc-text">L'atmosfera standard definisce valori di riferimento al livello del mare: <strong>temperatura 15°C, pressione 1013.25 hPa, densità 1.225 kg/m³</strong>. In troposfera (0–11 km) la temperatura scende di <strong>6,5°C ogni 1000 m</strong>. Sopra gli 11 km (stratosfera) rimane costante a -56,5°C.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Pressione standard</div><p>1013.25 hPa (o mb) al livello del mare. Diminuisce di circa 1 hPa ogni 8 m di quota nei bassi strati.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Quota 850 hPa</div><p>Corrisponde a circa 1.500 m di quota in ISA. Usata come riferimento nelle previsioni meteo.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Gradiente termico</div><p>6,5°C / 1000 m in aria standard. Se il gradiente reale > 6,5° l'aria è instabile.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Inversione termica</div><p>Temperatura che aumenta con la quota: intrappola inquinanti, favorisce nebbia e nubi stratificate.</p></div>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.meteoam.it" target="_blank" class="tc-link">🌦 Aeronautica Militare Meteo</a>
+    <a href="https://www.enav.it/en/services/met.html" target="_blank" class="tc-link">📡 ENAV — Servizi Meteo</a>
+    <a href="https://aviationweather.gov" target="_blank" class="tc-link">🇺🇸 Aviation Weather (FAA)</a>
+    <a href="https://it.wikipedia.org/wiki/Atmosfera_standard_internazionale" target="_blank" class="tc-link">🔍 ISA Wikipedia</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">☁ Nubi e Classificazione</div>
+  <div class="tc-text">Le nubi si classificano per altezza e forma. Per il pilota VDS è fondamentale riconoscere i <strong>cumulonembi (Cb)</strong>, pericolosissimi per turbolenza, ghiaccio e fulmini.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Nubi Basse (0–2000m)</div><p>Strati (St), Stratocumuli (Sc), Nembostrati (Ns). Associate a pioggia continua e visibilità ridotta.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Nubi Medie (2000–6000m)</div><p>Altostrati (As), Altocumuli (Ac). Cielo coperto uniforme, precipitazioni leggere.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Nubi Alte (oltre 6000m)</div><p>Cirri (Ci), Cirrostrati (Cs), Cirrocumuli (Cc). Formate da cristalli di ghiaccio.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Sviluppo Verticale</div><p>Cumuli (Cu) e <strong>Cumulonembi (Cb)</strong>. I Cb sono associati a temporali, grandine, turbolenza severa — DA EVITARE SEMPRE.</p></div>
+  </div>
+  <div class="tc-warn">Il volo nei pressi di cumulonembi è estremamente pericoloso anche a distanza di 20+ km. Le correnti ascendenti/discendenti possono superare i 30 m/s.</div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">💨 Vento e Fronti</div>
+  <div class="tc-text">Un <strong>fronte freddo</strong> porta nubi a sviluppo verticale (Cb), precipitazioni brevi ma intense, miglioramento rapido. Un <strong>fronte caldo</strong> porta nubi stratificate, piogge leggere e persistenti, deterioramento graduale. Il <strong>Wind Shear</strong> (variazione brusca di velocità/direzione del vento con la distanza) è pericoloso soprattutto in fase di atterraggio.</div>
+  <div class="tc-box">
+    <div class="tc-box-title">Regola della mano destra (emisfero Nord)</div>
+    <p>Con il vento in faccia, le alte pressioni sono alla tua destra e le basse alla sinistra. Il vento al suolo ruota in senso orario rispetto al vento in quota (deviazione di Coriolis).</p>
+  </div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio Pratico — Deriva in volo</div>
+    <p>Stai volando verso Ovest con vento da Nord. Il vento ti spinge verso Sud: devi correggere la rotta puntando leggermente a Nord rispetto alla destinazione. Questa correzione si chiama <strong>WCA (Wind Correction Angle)</strong>.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.meteoam.it/aviazione" target="_blank" class="tc-link">✈ Meteo Aviazione (AM)</a>
+    <a href="https://it.wikipedia.org/wiki/Fronte_(meteorologia)" target="_blank" class="tc-link">🔍 Fronti Meteorologici</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">❄ Formazione di Ghiaccio</div>
+  <div class="tc-text">Il ghiaccio sulle superfici portanti è estremamente pericoloso perché altera il profilo alare, aumenta il peso e <strong>può far aumentare Vs del 30-40%</strong>.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Ghiaccio Granuloso (Rime)</div><p>Forma in nubi stratificate vicino allo zero termico. Opaco, biancastro, meno aderente.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Vetrone (Glaze)</div><p>Forma in Cb con acqua sopraffusa. Trasparente, durissimo, molto aderente: IL PIÙ PERICOLOSO.</p></div>
+  </div>
+  <div class="tc-warn">Rischio ghiaccio: quando la differenza T − Tdp è inferiore a 6°C e si è in presenza di acqua visibile (nuvole, pioggia, nebbia).</div>
+</div>
+`,
+
+tecno: `
+<div class="teoria-chapter">
+  <div class="tc-title">⚙ Il Motore Rotax e i Motori VDS</div>
+  <div class="tc-subtitle">Tecnologia e manutenzione</div>
+  <div class="tc-text">I velivoli VDS più comuni montano motori <strong>Rotax</strong>. Il <strong>Rotax 912</strong> (4 tempi, 80 cv) è il più diffuso su multiassi avanzati: raffreddamento <strong>liquido per le teste, ad aria per i cilindri</strong>. Il <strong>Rotax 582</strong> (2 tempi, 65 cv) è comune su paramotori e strutture leggere: richiede <strong>olio premiscelato nella benzina</strong>.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Rotax 912 (4T)</div><p>80 cv, 4 cilindri boxer, raffreddamento misto. Carburante: benzina verde 95 o AVGAS 100LL. Due magneti indipendenti.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Rotax 582 (2T)</div><p>65 cv, 2 cilindri, raffreddamento liquido. Olio da miscelare (50:1). Più leggero ma consuma più e richiede più manutenzione.</p></div>
+    <div class="tc-card"><div class="tc-card-title">EGT (Exhaust Gas Temp)</div><p>Temperatura gas scarico. Monitora la corretta miscelazione. Troppo alta = miscela povera = rischio danni.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Quota di Tangenza</div><p>Quota alla quale la potenza disponibile = potenza necessaria: impossibile salire oltre. Dipende da densità aria e peso.</p></div>
+  </div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio Pratico — Calo di potenza in quota</div>
+    <p>Un motore aspirato perde circa <strong>1-3% di potenza ogni 1000 piedi</strong>. A 6000 ft (≈1800m) la potenza massima disponibile è circa il 80-82% di quella al livello del mare. Pianifica decolli in quota con piste più lunghe.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.rotax-owner.com/it/" target="_blank" class="tc-link">⚙ Rotax Owner Club (IT)</a>
+    <a href="https://www.flyrotax.com" target="_blank" class="tc-link">🔧 BRP-Rotax Ufficiale</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">🔥 Ghiaccio al Carburatore</div>
+  <div class="tc-text">Nelle zone della valvola a farfalla l'aria si espande e raffredda bruscamente, potendo raggiungere temperature molto sotto lo zero anche con aria esterna positiva. Il vapore acqueo ghiaccia, ostruisce il carburatore, il motore perde giri o si spegne.</div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">✅ Procedura con aria calda al carburatore</div>
+    <p>Inserendo l'aria calda si scioglie il ghiaccio: i giri <strong>calano ulteriormente</strong> (prima il ghiaccio che fonde blocca parzialmente il motore) poi <strong>risalgono gradualmente</strong> quando il ghiaccio è sciolto. Se i giri non riprendono, il ghiaccio non era la causa.</p>
+  </div>
+  <div class="tc-warn">Inserire aria calda PRIMA di portare il motore al minimo in finale. Con motore al minimo è più facile che si formi ghiaccio attorno alla farfalla.</div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📊 Strumentazione di Base</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Anemometro (IAS)</div><p>Misura la velocità indicata (pressione dinamica). Arco bianco = flap; arco verde = normale; arco giallo = cautela; rosso = Vne.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Altimetro</div><p>Barometro aneroide. Impostare QNH per altitudine MSL, QFE per altitudine sul campo. Errore max accettabile: ±75 ft.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Variometro</div><p>Indica il rateo di salita/discesa in m/s o ft/min. Strumento di navigazione verticale.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Virosbandometro</div><p>Pallina = coordinazione (sbandamento). Paletta/ago = rateo di virata. Pallina centrata = virata coordinata.</p></div>
+  </div>
+  <div class="tc-box">
+    <div class="tc-box-title">Tubo di Pitot ostruito</div>
+    <p>Se il Pitot è ostruito, l'anemometro si comporta come un altimetro: le indicazioni variano con la quota ma non con la velocità reale. Pericolo: indicazioni false possono portare a stallo non rilevato.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.skybrary.aero/articles/instrument-meteorological-conditions-imc" target="_blank" class="tc-link">📘 SKYbrary — Strumentazione</a>
+    <a href="https://www.aeci.it" target="_blank" class="tc-link">🏛 AeCI Ufficiale</a>
+  </div>
+</div>
+`,
+
+pilot: `
+<div class="teoria-chapter">
+  <div class="tc-title">🎮 I Tre Assi di Controllo</div>
+  <div class="tc-text">Il velivolo ruota attorno a tre assi che si incrociano nel baricentro.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Asse Longitudinale (rollio)</div><p>Dall'elica alla coda. Controllato dagli <strong>alettoni</strong>. Cloche/stick a sinistra → ala sinistra scende, si vira a sinistra.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Asse Trasversale (beccheggio)</div><p>Da ala ad ala. Controllato dall'<strong>equilibratore orizzontale</strong> (cloche avanti/indietro). Muso su o giù.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Asse Verticale (imbardata)</div><p>Verticale, centro fusoliera. Controllato dal <strong>timone di direzione</strong> (pedaline). Muso a sinistra/destra.</p></div>
+  </div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">Virata coordinata — la "pallina centrata"</div>
+    <p>In una virata coordinata: alettoni inclinano l'ala, il timone corregge l'imbardata avversa. La pallina dello sbandometro deve rimanere al centro. Se è all'esterno → troppo timone (scivolata). Se è all'interno → poco timone (derapata).</p>
+  </div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio — Virata a 60° e fattore di carico</div>
+    <p>In virata a quota costante con 60° di rollio: fattore di carico = <strong>1/cos(60°) = 2g</strong>. Un ultraleggero da 300 kg "pesa" 600 kg per le ali. La velocità di stallo aumenta di √2 ≈ 41% rispetto al volo livellato.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.aeci.it/upload/files/9%20-procedure-e-modulistica-esame-VDS-M.pdf" target="_blank" class="tc-link">📄 AeCI — Procedure Esame VDS (PDF)</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">🛬 Il Circuito di Traffico</div>
+  <div class="tc-text">Il circuito di traffico è un percorso standardizzato attorno alla pista per organizzare i decolli e gli atterraggi in sicurezza.</div>
+  <div class="tc-box">
+    <div class="tc-box-title">Sequenza standard (virate a sinistra)</div>
+    <p>1. <strong>Decollo/Sopravento</strong> (nella direzione della pista) →<br>
+    2. <strong>Controbase</strong> (primo tratto perpendicolare, vento sulla sinistra) →<br>
+    3. <strong>Sottovento</strong> (parallelo alla pista, direzione opposta al decollo) →<br>
+    4. <strong>Base</strong> (secondo tratto perpendicolare, verso la pista) →<br>
+    5. <strong>Finale</strong> (allineato con la pista, in discesa per atterrare)</p>
+  </div>
+  <div class="tc-warn">Chi si trova più in alto deve dare la precedenza in avvicinamento. Le virate standard sono a sinistra; se indicate diversamente, si segue la segnaletica del campo.</div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📈 Velocità Caratteristiche</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Vs — Velocità di Stallo</div><p>Velocità minima di volo in configurazione pulita. Varia con peso, fattore di carico e configurazione flap.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Vx — Salita Ripida</div><p>Massimo guadagno di quota per distanza percorsa. Si usa con ostacoli a fine pista.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Vy — Salita Rapida</div><p>Massimo guadagno di quota nel tempo (massimo Vz). Si usa per raggiungere quota di crociera.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Va — Velocità di Manovra</div><p>Velocità massima con comandi a fondo corsa senza superare il fattore di carico limite strutturale.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Vfe — Max con Flap</div><p>Velocità massima con flap estesi (arco bianco anemometro). Superarla può danneggiare i flap.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Vne — Never Exceed</div><p>Velocità mai da superare (linea rossa anemometro). Rischio cedimento strutturale o flutter.</p></div>
+  </div>
+</div>
+`,
+
+emerg: `
+<div class="teoria-chapter">
+  <div class="tc-title">🚨 Piantata Motore in Volo</div>
+  <div class="tc-subtitle">La procedura da conoscere a memoria</div>
+  <div class="tc-text">L'arresto del motore richiede azioni immediate e nella corretta sequenza. Il panico è il peggior nemico.</div>
+  <div class="tc-box red">
+    <div class="tc-box-title">🔴 Procedura Piantata Motore</div>
+    <p>1. <strong>Assetto di planata</strong> → Vmax efficienza (non perdere quota inutilmente)<br>
+    2. <strong>Identificare campo di atterraggio</strong> → davanti al muso, nel settore 180°<br>
+    3. <strong>Verifica carburante</strong> → cambio serbatoio, rubinetto aperto<br>
+    4. <strong>Verifica accensione</strong> → magneti, aria calda carburatore<br>
+    5. <strong>Tentativo riavviamento</strong> → se quota e situazione lo permettono<br>
+    6. <strong>MAYDAY</strong> → 121.5 MHz, transponder 7700<br>
+    7. <strong>Atterraggio forzato</strong> → cinture strette, cut-off carburante, magneti off all'impatto</p>
+  </div>
+  <div class="tc-warn">Piantata subito dopo il decollo: NON tornare in pista a bassa quota. Atterrare dritto o con angolo massimo 30° rispetto alla direzione di decollo.</div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio Pratico — Distanza di planata</div>
+    <p>Con efficienza E=12 e quota di 600m AGL, hai circa 7.200m di raggio d'azione per trovare un campo. Mantieni la velocità di massima efficienza: vola troppo lento o troppo veloce riduce drasticamente la distanza.</p>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📻 Codici di Emergenza</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">🆘 MAYDAY</div><p>Emergenza immediata pericolo di vita. Si ripete 3 volte: "MAYDAY MAYDAY MAYDAY". Frequenza 121.5 MHz.</p></div>
+    <div class="tc-card"><div class="tc-card-title">⚠ PAN PAN</div><p>Urgenza (meno grave di Mayday). Situazione seria ma non pericolo immediato di vita.</p></div>
+    <div class="tc-card"><div class="tc-card-title">7700 Transponder</div><p>Emergenza generica (squawk 7700). Il codice è visibile su tutti i radar di controllo.</p></div>
+    <div class="tc-card"><div class="tc-card-title">7600 Transponder</div><p>Perdita comunicazioni radio. Il pilota continua il volo secondo le regole standard di silenzio radio.</p></div>
+    <div class="tc-card"><div class="tc-card-title">7500 Transponder</div><p>Dirottamento/minaccia a bordo. Non dichiararlo mai per errore.</p></div>
+    <div class="tc-card"><div class="tc-card-title">121.5 MHz</div><p>Frequenza internazionale di emergenza. Monitorata da tutti gli enti ATC e dai satelliti SAR.</p></div>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.enav.it" target="_blank" class="tc-link">📡 ENAV Ufficiale</a>
+    <a href="https://www.ansv.it" target="_blank" class="tc-link">🔍 ANSV — Agenzia Sicurezza Volo</a>
+  </div>
+</div>
+`,
+
+norme: `
+<div class="teoria-chapter">
+  <div class="tc-title">📋 Regole del Volo VFR</div>
+  <div class="tc-subtitle">Visual Flight Rules — Regole di volo a vista</div>
+  <div class="tc-text">Il VDS opera in <strong>VFR</strong>: il pilota naviga con riferimento visivo al suolo e alle condizioni meteorologiche minime (VMC).</div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">Minimi VMC in Classe G sotto 900m AMSL</div>
+    <p><strong>Visibilità: 1.5 km</strong> &nbsp;·&nbsp; <strong>Libero da nubi, in vista del suolo</strong><br>Attenzione: queste sono le condizioni minime assolute, non quelle consigliate per il volo sicuro!</p>
+  </div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Quota minima su zone abitate</div><p>Vietato il sorvolo. Zona non abitata: 500 ft (≈150m) AGL. Fascia di rispetto di 500m laterale dalle zone abitate.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Ore operative VDS</div><p>Da 30 minuti prima dell'alba a 30 minuti dopo il tramonto (ore di luce civile).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Precedenze in volo</div><p>Aeromobile in avaria: precedenza su tutti. Alianti > Mongolfiere > Aerei > Elicotteri. Chi ha l'altro a destra cede.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Quota massima VDS</div><p>Fino alla base dello spazio controllato (normalmente FL115 = 11.500 ft), salvo CTR e TMA indicate sulle carte.</p></div>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.enac.gov.it/normativa/regolamenti-enac/rag-volare" target="_blank" class="tc-link">📜 ENAC — Regolamento del Volo</a>
+    <a href="https://www.aeci.it/normativa" target="_blank" class="tc-link">🏛 AeCI — Normativa VDS</a>
+    <a href="https://www.enav.it/sites/default/files/asset/document/AIP_Italy.pdf" target="_blank" class="tc-link">📘 AIP Italia</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📻 Fonia Aeronautica</div>
+  <div class="tc-text">La comunicazione radio aeronautica segue un formato preciso e standardizzato (ICAO). La struttura base è: <strong>[Destinatario] — [Mittente] — [Messaggio]</strong>.</div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio di chiamata corretta</div>
+    <p><em>"Torino Informazioni — I-ABCD — Ultraleggero monomotore — Posizione: 10 km nord Torino — Quota: 1000 ft QNH 1015 — Richiedo informazioni traffico per atterraggio aviosuperficie Caselle"</em></p>
+  </div>
+  <div class="tc-box">
+    <div class="tc-box-title">FIR di Roma — Frequenza</div>
+    <p>Nella FIR di Roma, la chiamata all'ente ATS è diretta a <strong>"Roma Informazioni"</strong> (non Roma Controllo, che è per il traffico IFR). La FIR copre tutta l'Italia centro-meridionale.</p>
+  </div>
+</div>
+`,
+
+navig: `
+<div class="teoria-chapter">
+  <div class="tc-title">🧭 La Bussola e il Nord</div>
+  <div class="tc-text">Esistono tre diversi "Nord" in aviazione, ognuno con uno scopo preciso.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Nord Geografico (Vero)</div><p>Il Polo Nord geografico. Le carte ICAO sono orientate al Nord geografico. Le rotte vere (TC) si calcolano rispetto a questo.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Nord Magnetico</div><p>Dove punta la bussola. Distanza dal Nord geografico = <strong>Declinazione magnetica</strong>. Variabile nel tempo e nello spazio.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Nord Bussola (Compasso)</div><p>Nord magnetico corretto per la <strong>Deviazione</strong> della bussola di bordo (effetto masse metalliche e circuiti).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Rosa dei Venti</div><p>Suddivisa in 360°. N=000°/360°, E=090°, S=180°, W=270°. Il vento viene indicato con la direzione da cui PROVIENE.</p></div>
+  </div>
+  <div class="tc-formula">Rotta Bussola (CC) = Rotta Vera (TC) ± Declinazione ± Deviazione</div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 Esempio — Conversione rotte</div>
+    <p>Rotta vera TC = 090° (Est). Declinazione = 2°E → sottrai: MC = 088°. Deviazione bussola = +3° → sottrai: CC = 085°. Imposta 085° sulla bussola di bordo per volare effettivamente a Est.</p>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">🗺 Lettura delle Carte ICAO</div>
+  <div class="tc-text">La carta aeronautica ICAO 1:500.000 è la carta di riferimento per il volo VFR in Italia. Scala: <strong>1 cm = 5 km</strong>. Contiene spazi aerei, quote minime, zone proibite/riservate, ostacoli e punti di navigazione.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">CTR — Control Zone</div><p>Spazio aereo attorno agli aeroporti controllati. Entra solo con autorizzazione ATC.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Zone Proibite (P)</div><p>Volo vietato sempre (es. zone militari sensibili, palazzi presidenziali).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Zone Riservate (R)</div><p>Volo consentito solo con autorizzazione o in certi orari. Verificare NOTAM.</p></div>
+    <div class="tc-card"><div class="tc-card-title">NOTAM</div><p>Notice to Airmen: avvisi temporanei su modifiche allo spazio aereo, ostacoli temporanei, eventi speciali.</p></div>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.enav.it/aip" target="_blank" class="tc-link">🗺 AIP Italia Online</a>
+    <a href="https://notamweb.enav.it" target="_blank" class="tc-link">📢 NOTAM Italia (ENAV)</a>
+    <a href="https://www.icao.int" target="_blank" class="tc-link">🌐 ICAO Ufficiale</a>
+    <a href="https://www.skyvector.com" target="_blank" class="tc-link">✈ SkyVector — Carte Aeronautiche</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">⏱ Navigazione a Stima</div>
+  <div class="tc-text">La navigazione a stima (dead reckoning) si basa su: <strong>rotta + velocità al suolo + tempo</strong>. La velocità al suolo = TAS ± componente del vento. Il <strong>WCA (Wind Correction Angle)</strong> corregge la rotta per il vento trasversale.</div>
+  <div class="tc-box">
+    <div class="tc-box-title">Carburante minimo legale</div>
+    <p>Carburante per la destinazione + Carburante per l'alternato + <strong>30 minuti di attesa</strong>. Se c'è vento contrario del 10% della TAS, aumentare il carburante del 10%.</p>
+  </div>
+</div>
+`,
+
+legis: `
+<div class="teoria-chapter">
+  <div class="tc-title">⚖ Normativa VDS in Italia</div>
+  <div class="tc-subtitle">DPR 133/2010 e Regolamento AeCI</div>
+  <div class="tc-text">Il volo VDS in Italia è regolato dal <strong>DPR 9 luglio 2010 n.133</strong> e dal Regolamento Tecnico-Operativo-Didattico dell'<strong>AeCI</strong>. La legge fondatrice è la <strong>Legge 106 del 25/3/1985</strong>.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Ente competente</div><p><strong>AeCI</strong> — Aero Club d'Italia. Ente pubblico vigilato dal Ministero delle Infrastrutture e dei Trasporti (MIT). Gestisce esami, attestati e certificazioni.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Età minima</div><p><strong>16 anni</strong> per conseguire l'attestato VDS (non 18 come per la patente auto).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Validità attestato</div><p><strong>2 anni</strong> dalla data di rilascio, rinnovabile con certificato psicofisico e dichiarazione di aver svolto attività di volo.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Visita medica</div><p>Equivalente alla patente di guida automobilistica. Validità <strong>biennale</strong> (annuale oltre i 40 anni per istruttori).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Certificato di Identificazione</div><p>Ogni apparecchio VDS deve avere il certificato rilasciato dall'<strong>AeCI</strong> (non ENAC).</p></div>
+    <div class="tc-card"><div class="tc-card-title">Assicurazione RC</div><p><strong>Obbligatoria per legge</strong> per qualsiasi volo VDS. Il pilota è responsabile di tenerla sempre in corso di validità.</p></div>
+  </div>
+  <div class="tc-box">
+    <div class="tc-box-title">Responsabilità del pilota</div>
+    <p>Il pilota VDS è il <strong>solo responsabile</strong> dell'efficienza dell'apparecchio. Costruttore e venditore non hanno responsabilità operative una volta che il velivolo è in uso.</p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.aeci.it" target="_blank" class="tc-link">🏛 AeCI Ufficiale</a>
+    <a href="https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.del.presidente.della.repubblica:2010-07-09;133" target="_blank" class="tc-link">📜 DPR 133/2010 (Normattiva)</a>
+    <a href="https://www.aeci.it/upload/files/4%20-%20Regolamento%20Tecnico-Operativo-Didattico%20VDS-VM%202015.pdf" target="_blank" class="tc-link">📄 Regolamento AeCI (PDF)</a>
+    <a href="https://www.enac.gov.it" target="_blank" class="tc-link">✈ ENAC Ufficiale</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📏 Limiti Operativi VDS Non Avanzato</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Quota massima feriali</div><p>500 ft misurati rispetto al punto più elevato nel raggio di 5 km.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Quota festivi</div><p>300 m (non piedi) — limite più restrittivo nei giorni festivi.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Zone abitate</div><p>Sorvolo <strong>VIETATO</strong>. Distanza minima laterale: 500 m.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Ore volo</div><p>Da 30 min prima alba a 30 min dopo tramonto.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Casco obbligatorio</div><p>Solo per apparecchi a cabina aperta.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Formazione</div><p>Consentita solo se i piloti sono abilitati al volo in formazione.</p></div>
+  </div>
+</div>
+`,
+
+sicur: `
+<div class="teoria-chapter">
+  <div class="tc-title">🛡 Fattore Umano e CRM</div>
+  <div class="tc-subtitle">Il 75-80% degli incidenti è causato da errore umano</div>
+  <div class="tc-text">Il <strong>CRM (Crew Resource Management)</strong> è l'uso efficace di tutte le risorse disponibili (strumenti, comunicazioni, regole, esperienza) per garantire la sicurezza. Nel volo VDS monoposto, il CRM si traduce in auto-gestione del carico di lavoro e del processo decisionale.</div>
+  <div class="tc-grid">
+    <div class="tc-card"><div class="tc-card-title">Continuation Bias</div><p>Tendenza a proseguire un volo nonostante segnali d'allarme. "Siamo quasi arrivati" — uno dei bias più pericolosi.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Disorientamento Spaziale</div><p>Le sensazioni corporee contraddicono gli strumenti. <strong>Fidarsi sempre degli strumenti</strong>, non delle sensazioni fisiche in IMC.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Ipossia</div><p>Carenza di ossigeno: euforia → scarsa capacità di giudizio → perdita di coscienza. Rischio sopra 10.000 ft per tempi prolungati.</p></div>
+    <div class="tc-card"><div class="tc-card-title">Alcool e Farmaci</div><p>Alcool: riduce coordinazione, giudizio, riflessi. Alcune sigarette equivalgono a volare a 8000 ft per l'apporto di O₂. <strong>Tolleranza zero per il pilota.</strong></p></div>
+  </div>
+  <div class="tc-box red">
+    <div class="tc-box-title">🔴 Volare in IMC senza abilitazione strumentale</div>
+    <p>È la causa più frequente di incidenti fatali nel volo leggero. Entrare in nuvola senza abilitazione porta in media a perdita di controllo entro <strong>180 secondi</strong>. Mai, per nessun motivo.</p>
+  </div>
+  <div class="tc-example">
+    <div class="tc-example-label">💡 La Catena degli Eventi</div>
+    <p>Gli incidenti raramente hanno una sola causa. Ogni incidente è il risultato di una <strong>catena di eventi</strong>: ogni anello è una causa necessaria ma non sufficiente. Spezzare un solo anello avrebbe evitato il disastro. La <strong>checklist</strong> e il briefing sistematico spezzano la catena.</p>
+  </div>
+  <div class="tc-box gold">
+    <div class="tc-box-title">Il Processo Decisionale in Volo (5 passi)</div>
+    <p>1. <strong>Definire il problema</strong> →<br>
+    2. <strong>Cercare soluzioni possibili</strong> →<br>
+    3. <strong>Scegliere l'azione migliore</strong> →<br>
+    4. <strong>Applicarla</strong> →<br>
+    5. <strong>Valutare il risultato e correggere</strong></p>
+  </div>
+  <div class="tc-links">
+    <a href="https://www.ansv.it" target="_blank" class="tc-link">🔍 ANSV — Sicurezza del Volo</a>
+    <a href="https://www.skybrary.aero/articles/human-factors" target="_blank" class="tc-link">📘 SKYbrary — Fattore Umano</a>
+    <a href="https://www.flightsafety.org" target="_blank" class="tc-link">🛡 Flight Safety Foundation</a>
+    <a href="https://www.aeci.it/sicurezza-volo" target="_blank" class="tc-link">🏛 AeCI — Sicurezza Volo</a>
+  </div>
+</div>
+<div class="tc-divider"></div>
+
+<div class="teoria-chapter">
+  <div class="tc-title">📋 Checklist e Pre-Flight</div>
+  <div class="tc-text">L'uso sistematico della <strong>checklist</strong> è il principale strumento di prevenzione degli incidenti. Non è un rituale ma una verifica attiva e consapevole.</div>
+  <div class="tc-box green">
+    <div class="tc-box-title">✅ Punti chiave del controllo pre-volo</div>
+    <p>• Carburante: livello, qualità (assenza acqua/impurità), tipo corretto, rubinetto aperto<br>
+    • Olio: livello nella gamma operativa<br>
+    • Superfici: integrità, libertà di movimento, assenza ghiaccio/neve/residui<br>
+    • Comandi: corsa completa, senza inceppamenti, senso corretto<br>
+    • Strumenti: indicazioni coerenti con condizioni al suolo<br>
+    • Documenti: attestato, CofA, assicurazione validi</p>
+  </div>
+</div>
+`
+};
+
+function showTeoria(key, btn) {
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  document.getElementById('teoria-content').innerHTML = TEORIA[key] || '<p style="color:var(--text-dim)">Contenuto in preparazione.</p>';
+  window.scrollTo(0,0);
+}
+
+// Init teoria with aero on load
+document.addEventListener('DOMContentLoaded', ()=>{
+  showTeoria('aero', document.querySelector('.ttab'));
+});
+
+// ============================================================
 // PRINT EXAM GENERATOR
 // ============================================================
 const LOGO_B64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAyCAYAAACqNX6+AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAAaRElEQVR4XtVcCXxU1dX/z5LJvk12su8rBMq+iUgREEWoIopoRbRW1C7a0qpFlPaj2KIWcaliXVH8FARFVBAJCChhJyH7vu/JZCbJZJbM+865kxcmIJgA9Qvn93uZmffuev73LPec+6KQiDqMJXCSjsLZbT4ADSRYoKC/gK33UtAnk/zJz+TvvY8G9MH1Bks9MJs8oXG+lP7sfZnFrDro76X0f+54lb08kT8HMx/mp4ouJ3slyYlGpIDN/CkMRm/4+EyHggHpbG+GviMTe/Y8iWifUEQFj4VRqYRO5wxXVyA1tQ1wsRA+NAiJGcPXYCfH5XkSgyAr9ePdBpOuAVsO3IIl8+4aRGV70ZZ2E9xsW+DiUwcYm2kOPRdoY6CAy0zldoi5F8Sllz8K+lRR2zYFmit8UVquQEhwM2oqjcj9/hAqdHlIm3QXho+6A9rAdAKkp4dAUsBktqG8qhmHv38bZw6+jjHJaVC5afHbVSnQG1IFkkB773qTQRkMfy40YUeQeBKOQPNqMmH3pn0YM7kBGz6agWV3/BY+WvWAOjZ0tMFDtZOYZkbKaCdUlWuoHi2sS6JL0Q48F+7Tk7hHOkcqxKJ5GfB2rcKJ3GrEDh+J6Oi58PbxQUigFomJ4XYJsdlssNmsaNd1oqa2BcfPZCPzyLvwQh6mj/GCryYJ965MR35RJDVKIiOA6bavkMsmGQArteRMlwtdjgx3g6e7GW/+MwOjRpbio6yJuP+2FfD3vfiKbu1sh69im1iZ8aOUKCt1pTl2XvZoB9aArA28aa2b4OtbivsWfQtnpywcyepEeZMfEmKHw1cbiqBALyQmxCIlJYXAiT4LiFJJuoyk0WTqRlNjM6qqm3Dk2BEU5u+G0uNLLL81Dq014/DXDVHYsz+NgGHGNTqsuIGK/LlTkgEJpcGztq+nS0cXqwYmfu4BL49OvLc+B/GhJrSovRAaEgUnVxfSGLSYaPUpuRypU5uCVIkqBEFePlB5NmPiZCccPcJgcJtXYgFdCBLZrnIfvmJEERFZuPvWw9A6F+Hz78vQ3DYMLi7BCAoORXBQANJHDEdichJiY2Lg5+cHd3d3OyCOXfBPu8RI6OjoQnlFLXJzKrF397+R5JeBa+ZEw0MTjjUvjcDmrUkEjAdVZ4PZRReDMphJ9+phBGPqxO+x+d+fAH5hYkIAS4ysoHmIzijPcofGiZwOawQ9ok9hz7g/uR0rFE6RiAzRIzA6F+FxSWhocIfVqu9t61IXzcXkgsfG/bPm4MuKuJiTuGfRUfRYSnDspA5FtU4IDZ2MAH9PxMREIy0tGfHxCXTFkY12hUqlgpJstoJMx3mAnAuO1Wol425AXn4Jjufmoj5nJ1zcT+PaEd1kY27AG+/5YtMnw4k5Xr3A8ORlG3MxI86TIN2qoJUS/yG+3HkAwdG7ib/sgZytx3IiVj/9NRn5PrftqNJkB+Psp6J1IZKmXo+yMgJOqNdLsXkXA4Gf8fi5XVazLBGdtOKzMXNyPqmmI8jKakZlWwhcPIIIiGFIiIsSAKSlpZJqiiE15kvS4iJAcKSLAiIXZImxWHqg13egtKwKZ3KykZ1/BJ7m/8WMKbHQqAPxny2peOv9RALGuxcYI30yI39IYngyrF/bsPXf72HMrAj4+f8Nbu7RP8aFH3meh5bsJZg4/24UlYZSWV0v0wbp3V20FxkIVtnudBmQlFCAxfMzYequQHZWHar1QfDwjCS1FEwSwUDEYsSIEQgPDyfX1gdqtbpPIs7takCAyJVYnZkJGJ1Oh+qqehw7cRo5JXsRhBMYmWhGhDYC6z4Yj/c+jiBgtFSNQWFDeq6qcIKbqxFHv9mH6LS/wtXThVRkKA3yclTKSTTn/hpTbroFBaXx1GfrFZQMllMeG3/KQHQgPqYYi28+QkCcwelCExrb3OHuGYVhIWFkP8LJUCcKYx0aGgp/f/8+IC6G96AAcZSYHmsPGptaUVVVi+ycUygrPAid8XtMS3GFl3cydu6JxCtvpRAwPlSN1RiDI0/MA8+v2o/f/+UWSCoG7lDvhMnLUKTT92G9XQ0MoI62StTnLcL8pbOQUziiVzK4iYHVv7jYyWNm99VHqKaxP8vCzElZZMuKcbK0EroOGq8UQMY6jKQglLzBdKGe2GuSgWA7MRC6JED6gOnpIYPZAwMZ/7KyShSVlCLn9C54qTMRE9aDQG0kMo6k4Zl1cb2qjA01OwDuKMnOgNFkxTMrndHUroGT2ob0FB2um6LDNVMUcBs2nAz0IipLHl1v3ID7/SHl02P9J0alFiO7cDaVoE2soIGCYbdSZ0n2ceRPthF8GTFx7EncMCMXba3FyCtqRYvRH16ecWQPtEggAFJTyWOKjRWXm5sbNBqNMNiDocsCxLEjs9mC9nYDCgqKUVhUgNLC/dBYjyEsoBlxgVOx81g0XtgYD6vZjxhsw4SxVejqckVRkQvMViVYW3l69MDP1wKtbxv55hVYtrgNU2cRMzRsD1hqmEm8sdOgMNsP8Wm/ELoYeB2p8QXILR4tGDewiIDsVnN9mfkMovybQbDbiGun5GDCqCIY9MdQVtuBZkMA2U1faP2CCYh4JCQwGMmIioqGVquFs7PzecZ6oKBcMUC4QxuFJUwmCzo6u2kjVoGCwjOorShAXddXmBBJZtx9GI5mJeDZl6LQbQy2r3yJGWxnCO9m7Qu7B+5uCkSFGeEXSF6SklUeb0T5ckV0UAmeeMwX8eNe6ZWEdfDzbEBrxzj6zV7Vj61KWQ2piHHstvNvMtbkRvNisdfXY8qEIlw78RQ62oqRX9UKXXcknAkI3kewSkogY81ADBsWCm9vLwLCZdAScS5QVxSQs42T8Tdb0UbuMhv/UzknUFV8iAKYOQgN1KG1JQLV1T5wVxhII7sTC2hVEhAuGjVtANVk/Jzopxo2SUVSpEBHlxXdJntYRePkgqhhJkyZYsHoma+JLiXTQfzPk//CU88vJICZoawWLxZe4bbUmDfbgIcfzUVHnS+aWyykejvQru+GsdMCXUs1FKpSNOotqDd4UekAMtYRiI6KFMY6KSkJYWFhYkPHqulc93WgEvETAWLvxu4u0+TaDBRUq6K9TBYF1Y6io/U7NDZXo8PiBI2NducsGISJVusMdy9XuJEj40rbERv56Dbet9pUsFIIREGbVdJRCAzwRFpUDEIjxiE0fh6U6gA01q7C8QMduHHJDAKFGS5vVH/IltjtRnS4FX95IgtL7qonwDX4YnsDtu8sh9FCOx/qu1PvRIvFD1raR0RHRtI+IxUxsdFCNfE+glXTYG3EjwH1X5KQ/t3agaFYmZ7iOOWVKC3NI9uRQ6DoyKaQzicGsvpSKK1IS9EgMVKCm4dOMJZXntgOEl9FFEFSQu3kBldVDNydymCz6GklkwF1d0NYTCc+2+2KZUvHoKWN3VN5z3AuG+zSplCoEButRkpaA6ZNqsa866pRWlGPvYcDUNmkhp9PEqkjP8RGBiIiKkps6Dw8PMSG7koDIY/wJwHEkR1s/PWGLlRWVpHktMJoJLsguE2rUmpHQpQeRr0GT691p70KCw+DZSex1umPrt2ZvLtO0vR6mLoorE4lVBpvePmp6VsHvt7lRekEBkQOv8gjkA25o9SwO6tCRJgZo0e0Y8FNNZg0owftHRY01LgSpPMwbkI8BTjtQFwp1XQhSfnJAeGBsJ7v7jYRUy3oIddZdlE5uKg2HyHXuQQTZ4WTveBHDvkLITFuiI2qwhNPncSzfx+O09kcHukgnNyorD2uxREADpQ6wMgKlC5mPoPBQUw5GChHZtnmKEGeK0aM6sS0ydVYOM8Es9oEPeeFPJfBKygB3r25pQsx9HLv/78AcrFBG9p3o/T0cYy7Pogyhcw8x4QSM88bG9cdwoIFpdjxRRyWPjJeNDdlTAPue7gOr24IQebxQLrD7i+THONSIjKsm9SmM3R6Du/wc/ba+pexZ/OUFCA0YdJ4I4YPL8Ev72yD2ssfXe3JBGUKQsLHw+VKRmMcGPJfavbS10krSQ3lauDv5xiglIOKvDfows9n6/HIozNpk9YOP60RwQFd+NvabBw4AKxZm4Xxozlscq7rq8bsGQ14+ZWjuOe2QpIilhgGhtuUlSLfM4mruFSNdzd7Yv2GkXj8qfF4/RUblT5ENmQXdOUb0NJUgi4ueoVpyAEiGdwoHqRAeOi5O2gGyAnTxjcgKMqC1DQd/EJ6MG5kI+UT9JThNMHQ4galVY3EOJ1Y5f2pB1rvRvQYj2HSuF341+qDmH9DOTkIbGd4L+IIDEslc9uC6joJ/3nHDetfHIE/Pp2Et17vhmTMgZNmI3lhL6OqpgCd3f0yGJcFkeppostq4QpXNpr18FBUUCxMicJi2VPiTpRw1tjwxsYTOHTAC/V1ClTRNefGFmzd5oVfP1CN1/4TidEpBuzYrSVGeVIdeQOoIK/IgrHpOfhqfx6aWl3IIyvFCLJF08Z1o9vsjIpqTh+wxHCffHFug0Fi20JHJDrdcfx0ILKzA1HbEErfdYigPL2nuhVdlkZKPrVA6xN+2dwYcoAoaZOl7sxEbr4SBzPJUAtPiaVDhegIPe6+vRq/+8MoehaGEyf9MOZnrXhnUxh5WTakpbfBYnTCJoo2m8xycsuu+gL8SYpSjiO/zgAX51HE6zjaR6igdqnAxDFV9KwVPQorxaAMCPJrRaCfrvdqR4BfG31vps8W2iN1ooIOKBz6zgXVlUr4uBVCZamDrasRFkUeOSv+5LJzDt0uobLrPlCkhpxR54GfqXwadd+6YN794cIbs5MSw4K7aZWb8ekuP7F6eR/xi7l5KCz1IiaF4MGHCrHvax9knuAYFAPJZFd1qUl5uG7CR8ipDSEbcw3Gj5tKh2gUKCjKhqYnA34ezThzpgMNLU7U07mbSdkxECwmD05JEuGMTkqYhQ0zIirImWJwzvD2N8PDNwVhUVokpy6knMhIijr0ZgLPSURdCKAhCcipmg8Q3lSIlNlRaGzgobPqsYc77GrE7h2tXp2LKH8rXMmw5xVGYvUzcbD2sEsre0/ytDWY+/O98PHdAYN5Oq69dhLm3jCHEkjDaE/TiX3ffoeGpjwYmg6jobFJxOPsIRgZUsfdkD3mpqLoNH9rbtHAYrXByUmNIB8tvLVmhIZ5YvTYWxATNwMBAVp6RqGgqxmQdspv2FqewwMr4vDxNpYGRwbb8+tLl5ThoeWF2LEtnQ4z6HDDzHLMuH4a2g0MmuwQyIFCE/7w4BacKsjDsLBZmDlzOmbNmkXMChCM7+w0ob6hmaSlCBVl5ZQZ1RGTKT//IyF8ERtW0ca116YrlSpSg+7w9aFwi9adjvXEiiwh582vakCMJhsaSp5GVQFwzS/SaNocLHQkDU4dzMCLr4ZT2phC7opOzJ+rx9cZKjK+juF0ruNKaqUAv7xtC77JVJGqug6zZ8/C5MmT4enJhr+XiKuGzk7o29spoGkUMbiBMpFbYFshHxBhgFhifH19RMp2MOH4IamyzBRELC3/BHHuh5E8OQHFJezxsC2x63aFQoMzh/fiz0/FYscuBqwL8280ImM/Bd8NfRzm9UuXE3656HOYrEfRoIvE9T+fJQBJS0sTKdVziSWGT9xw/G0wgMjtcD0ZIM7VyCdKzuvoAjeG3D6Ex6khY6v2GEGekwJLbmUjwps82bDySlTi4+1B5OqW4dZ5DXjkkQqyH1+R98S5FS4rh0WcyE40ICa8FJU15BF5+1OuO0Koqh8Cww62nYms97nMYC8OxfPFUsFt2BNoA6fBlR54u5ddMsQ7HhWlGtx5u4U2ibzs5SASA2PBCy/FoaLeiXIaOVh0SykOHYlAK6WCz4JhB3Dq2HyUV9cTY/3pTG2QOHzg7c37jaFJQxYQd3Km2nsmU1ikBg8ubXIAhBlJoXyDKx56aCI+Jxf4mVVxWL58Aul9no4crNSQdNQgLvoUSqstCAiKEUdyWELYyA5VGrKAMMPSx81BbZkKj9xbg+RETs3yRlFWR0Zxzjgm2oiqWj7FyEDIm0ielhpzZ2SiqrmKIIpFcLCW0q7xIsM3WDXyU4I3pAEROj10ObotRvx5RTlcXOW9CH9yPrwbv3+oHpPGsp2Rg5H8qUZ6ah6iw3JQVO6JgMBh5ILG950GuRRj/VOBMuQBiQxPR3nzAlx3cz7lJyqJLxxn6jXwdCihsNANza2OKkhDYY5G3HLTXuw5aKCcSgzlTyj9mj5S7AmGMhgM+pAHRENOU3DMNJyh1wleXpmP66byuStZdUniPJdSJe+q1eTdmDBj6gFKFdfCaKbUa0QwpWjtR/35dPlQpyEPCAtDWLA34nzWo8PYgrc3HEJyAtsKu1Ro/U1wd2V3V005+R6MSd9HG0E67JzTg/CY4RhOYIwZM4ZsSPB/LQ9+JUEe+oD0zjYsIgC5tj/C5KLD6hUESpyZzLsLKhpcKC/Ppz96kBSfianj92P/d4BXSCpSkmIEGJF0YoT3BFcDDcmd+oUY12mwYPN3ezAr8HkcPxWNZ16YhNNnNHSoTqIjPfsw9/r92H2gC34BP6Pj/xGYe+NcjBo1CkFBQUPedshzvqoAEYOmA3Nv79yA6fE7UV7sjeV/nAz/gFOYMXkHdmRo4Os/HinJ0XSQbiJFdacLN3eoG3LHBXj1AUKKqqXVhC93b4ePcSN9b8fh43U4XKCkjF06ubeRBMQ0oarEO3sDDHsPFXV2FQJiZ10XHUzM+P4kPt7yOzTU2ug1u1hERQdi2jXXYNy4cQgM5JMnVx9dtYAwq40UJq+saMOprEy0tNTSedtk8aYSv5NxtVIfIEajkQ5AV9O5VXq7tdcjMRgMqK/nt2LPEkdDY2NjUFFRIXIGMnl5eQnjKVN5eXnfcw7mXWjF6vV6ejFTpAXJU1JT/5EitNHa2krp2246yim/vGNvmdvlWBT3xfkHPprKJ8/57WGz2Swumdh+8OsBjsRjrqmp6Td2PjTNbXJdnhfzoItEkN8U47efysrKzsOXx8X7GuYZjzMuLq6vTHNzMx0CtApXWyYOy1dW8li9xblgJrk/7oPfJxHEb+Eybd68mc4XK6TDhw/Lt6R3331X3AsJCZEoKCfRTleKj0+TuruNUkxMjEQrUdzn5wsXLpRoIKIuDbKvPNdZsmSx1NJif+ZInZ2d0vPPPycFBgZI5JpKfv4hUlZWlihCh2EkyuqdV4fsgnTPPfeI+8RcKSwsQVqz5lmJGCglJiaKMXFbfD322GNSW1tbvzYIUPGMGEN1wyRijvTRRx9JxByppKREosUg5ebmSq+++irNNV6iBSkR8yVaAIIXFLqXiIHS3r17RbuTJk2SKNwu6sv06KOPSgsWLKD/ydDTd4/Hwf2uXbu27x7zmtv84IMP+u4JQLgxfkCISlOmTOl7+Nprr4n7mZmZUkNDvVRZWS41NtZLVVXV4v77778v1dXVCRAZ2wcffFAymUyCMTzoqqoqiVacmNDSpXf3GyB38vbbb0u0MqVt27ZKJI2iDjOJ6f777yegAs8DhFa8dOedd/YBQjlraeXKv0jt7e2CmRs3bpRIusRvHtOzzz7brw1apaLcihUrpKKiImndunXi97Fjx/gfKEjc/hdffCG9/PLLEuU0xHyOHj0q7dy5U7THzONFwwuAJEiifIlEktIHEHe2ePFiwXxH4rIM5urVq/tuz5kzRyxm5iX3wyQA2b9/v0QHiQVzSV1JvHKZuHM67U1AVBIgDeJixtXW1ory/CnfJ5GTXnrpJdEWD5wnJxPX4Xu82mTi1ZOamirdcccdffe4jlzv4YcflijNeh4gLJnMTCYuy238/e9rxZh5tX/++ed9Y2JmHTx4sF8bPAZSr9KXX37Zd59X/5IlS0QbDBDTmjVrBAPlVU4qSMyBGSvTfffdJ40ePVr605/+JECVy/7mN7+Rpk6d2q/fjo4OKTk5WfCIiftiyeLFw8Dv27dP3Bc79eeeew4333yzyHKNHDkSNKhenc4vzHRRYC5dvKDC1z/+8Q+wvWC9x2+Y8j3WlTQoyk88hPz8fFGXdahMrDuZmpo4r2EnEmGhozm3LRO7qI52yfF7XyGHtnlBcT8qFZ+cl8Se46677uobK28K2cg7Eh/u5n5IPfXdJnWL4uJiocdJzYn7nClkvW8/DA7Q4hOfhYWFffN788038fXXX4u5M+9oQYtnXM9x/nJHcnqXfzOPx44dKx7xgYsXX3xRfFfypAkdfPrppyDxoZN52eCOeCBs1NngsdFtbGwU16pVqwQzSR3ROaYzwlDxYJYvXy4GwulRnjAbLPt/hOAjMvZ0KLcvEzOPDfNnn30m+mKG0qoBSaUownUYeJkpMmPYyeB6fJ/rsIFsaWkR7TND+JLHynObPZtfBD1L8nsdJGmiXy6zadMm2r8k9isnp27lfQynZZl4rkzffPONGAMvTDbw3M7KlSvFM/7OY+f2+WJw5L7k+ZB9xvHjxwVPdu/eDZJYu0PyxhtvCD3I9mD9+vUSMUiIH4v+tm3bhH575513pD179oh7hw4dEqqHy8jqgOtwG6dOnRJix7qff7NxZPvD35cuXXqe+tmyZYtQkVu3bhXqkpglxJeJABaGl+3TJ598Im3fvl2oqAkTJvQZ3l27dom2aQGR09Ai6rOqy8jIkIhh4vf06dP79VtaWirqs71jNcFGllXHt99+268cMVeUIw9K3Od6zIsDBw6I37TXkVhN89i4/2XLlonnrJ4feOCBPlvE42aHie00OxzM76+++kq0zfNnnn/44YdiHi+88IKEm266SXgZjnTvvfcK48OeQUJCguhIvmRDe9tttwlwZHryyScl9oCYmHE8YbnOhg0b+tkUx764DbkcgybbEDb4bBgd+yb3UzyfNm1a3/233npLNMeA/OpXvxJ6Xq7z+OOPn9cve4Ks+xksLsdOxbmeGLfHzCI13uc9cfu8GHgMzHQ63tPPnvC42L7xfGjFC4/Ucezc5hNPPCGcB+bH7bff3o/nDNzEiROl/wMniFpQ4pueVgAAAABJRU5ErkJggg==';
@@ -1348,6 +1857,29 @@ function generateAndPrint(){
 }
 
 </script>
+
+
+<!-- ============ TEORIA ============ -->
+<div id="teoria" class="screen">
+  <div class="hud">
+    <div class="hud-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>VDS EXAM PRO — TEORIA</div>
+    <button class="btn btn-ghost btn-sm" onclick="showScreen('menu')">← Menu</button>
+  </div>
+  <div class="teoria-tabs" id="teoria-tabs">
+    <button class="ttab active" onclick="showTeoria('aero',this)">🌬 Aerodinamica</button>
+    <button class="ttab" onclick="showTeoria('meteo',this)">⛅ Meteorologia</button>
+    <button class="ttab" onclick="showTeoria('tecno',this)">⚙ Tecnologia</button>
+    <button class="ttab" onclick="showTeoria('pilot',this)">🎮 Pilotaggio</button>
+    <button class="ttab" onclick="showTeoria('emerg',this)">🚨 Emergenze</button>
+    <button class="ttab" onclick="showTeoria('norme',this)">📋 Norme</button>
+    <button class="ttab" onclick="showTeoria('navig',this)">🧭 Navigazione</button>
+    <button class="ttab" onclick="showTeoria('legis',this)">⚖ Legislazione</button>
+    <button class="ttab" onclick="showTeoria('sicur',this)">🛡 Sicurezza</button>
+  </div>
+  <div class="teoria-body" id="teoria-content">
+    <!-- populated by JS -->
+  </div>
+</div>
 
 <!-- PRINT DIALOG MODAL -->
 <div id="print-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:100;align-items:center;justify-content:center;padding:20px">
